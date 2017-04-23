@@ -6,7 +6,8 @@ This is a Maven-based Spring Boot application, which is used for consuming an AP
 As this is a Maven-based project, the dependencies and build properties are mentioned in the parent pom.xml file. To build the project, simply run the below command in the parent directory where pom.xml is present.
 
 ```script
-mvn -U clean install```
+mvn -U clean install
+```
 
 Above command will build the project for the mentioned dependencies and will package it into a WAR file which can be deployed on a web server, such as Apache Tomcat.
 
