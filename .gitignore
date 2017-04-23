@@ -1,4 +1,4 @@
-#Java related GitIgnore
+# Java related gitignore
 # Compiled class file
 *.class
 
@@ -22,7 +22,7 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-# Maven related GitIgnore
+# Maven related gitignore
 target/
 pom.xml.tag
 pom.xml.releaseBackup
@@ -35,3 +35,14 @@ buildNumber.properties
 
 # Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
 !/.mvn/wrapper/maven-wrapper.jar
+
+# Eclipse related gitignore
+.classpath
+.project
+.settings
+
+# OS
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
