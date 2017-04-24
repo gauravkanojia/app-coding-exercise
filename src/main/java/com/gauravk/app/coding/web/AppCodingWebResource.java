@@ -35,12 +35,6 @@ public class AppCodingWebResource {
 
   private static final Logger logger = LoggerFactory.getLogger(AppCodingWebResource.class);
 
-  private static Properties properties;
-  
-  public AppCodingWebResource() {
-    loadPropertiesFromFile();
-  }
-
   public static void main(String args[]) {
     SpringApplication.run(AppCodingWebResource.class);
   }
@@ -57,7 +51,7 @@ public class AppCodingWebResource {
       final String uri = "https://2016.api.levelmoney.com/api/v2/core/get-all-transactions";
 
       HttpEntity<CoreApiRequestBody> entity = new HttpEntity<CoreApiRequestBody>(getRequestBody(), getRequestHeaders());
-      ResponseEntity<CoreApiTransactionsResponse> response = 
+      ResponseEntity<CoreApiTransactionsResponse> response =
           restTemplate.exchange(uri, HttpMethod.POST, entity, CoreApiTransactionsResponse.class);
 
       logger.info(response.getBody().toString());
@@ -66,6 +60,7 @@ public class AppCodingWebResource {
 
   /**
    * This method is used for setting the header values for consuming the Core API.
+   * 
    * @return - HttpHeaders
    */
   private HttpHeaders getRequestHeaders() {
@@ -79,6 +74,7 @@ public class AppCodingWebResource {
 
   /**
    * This method is used for setting the Request Body for consuming the Core API.
+   * 
    * @return - CoreApiRequestBody
    */
   private CoreApiRequestBody getRequestBody() {
@@ -86,35 +82,13 @@ public class AppCodingWebResource {
     CoreApiRequestBody requestBody = new CoreApiRequestBody();
     CoreApiRequestCommonArguments arguments = new CoreApiRequestCommonArguments();
 
-    arguments.setUid(Integer.parseInt(properties.getProperty("core.appId")));
-    arguments.setToken(properties.getProperty("core.appSecret"));
-    arguments.setApiToken(properties.getProperty("core.appToken"));
+    arguments.setUid(1110590645);
+    arguments.setToken("42B2447FC75392EF9B91F70FF4DD359C");
+    arguments.setApiToken("AppTokenForInterview");
     arguments.setJsonStrictMode(true);
     arguments.setJsonVerboseResponse(true);
     requestBody.setArgs(arguments);
 
     return requestBody;
-  }
-
-  /**
-   * This method is used for loading properties from property file.
-   * @return - Properties
-   */
-  private Properties loadPropertiesFromFile() {
-    
-    if (null == properties) {
-      
-      try (FileInputStream inputStream = new FileInputStream(
-            getClass().getClassLoader().getResource("application.properties").getPath())) {
-        
-        properties = new Properties();
-        properties.load(inputStream);
-      
-      } catch (IOException ioEx) {
-        logger.error("Error while loading properties file: {}", ioEx.fillInStackTrace());
-      }
-    }
-
-    return properties;
   }
 }
