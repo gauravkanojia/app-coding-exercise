@@ -23,6 +23,16 @@ mvn spring-boot:run
 java -jar target/app-coding-exercise-1.0.0-SNAPSHOT.jar
 ```
 
+*URL for Getting all transactions* <br/>
+Operation -  **POST** <br/>
+URI - ```http://localhost:8080/coreapi/getAllTransactions```<br/>
+cURL command - ```curl -X POST http://localhost:8080/coreapi/getAllTransactions```
+
+*URL for Getting Average Expenses and Income* <br/>
+Operation - **GET** <br/>
+URI - ```http://localhost:8080/coreapi/getAverages```<br/>
+cURL command - ```curl -X GET http://localhost:8080/coreapi/getAverages```
+
 ## Useful Links
 1.  Spring Project Website: Use [this](https://spring.io/) link.  
 i.  Consuming a RESTful Web Service: Use [this](https://spring.io/guides/gs/consuming-rest/) link.
