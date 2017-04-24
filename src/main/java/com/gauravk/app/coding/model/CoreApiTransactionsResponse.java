@@ -7,13 +7,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author Gaurav Kanojia
  *
  */
-public class AllTransactionsResponse implements Serializable {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class CoreApiTransactionsResponse implements Serializable {
 
   /**
    * 
@@ -31,7 +33,7 @@ public class AllTransactionsResponse implements Serializable {
    * @param error
    * @param transactions
    */
-  public AllTransactionsResponse() {
+  public CoreApiTransactionsResponse() {
     this.error = "no-error";
     this.transactions = new ArrayList<Transaction>();
   }
@@ -52,6 +54,11 @@ public class AllTransactionsResponse implements Serializable {
    */
   public void setTransactions(List<Transaction> transactions) {
     this.transactions = transactions;
+  }
+
+  @Override
+  public String toString() {
+    return "CoreApiTransactionsResponse [error=" + error + ", transactions=" + transactions + "]";
   }
 
 }

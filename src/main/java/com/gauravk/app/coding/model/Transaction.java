@@ -5,6 +5,7 @@ package com.gauravk.app.coding.model;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -13,7 +14,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author Gaurav Kanojia
  *
  */
-// @JsonComponent
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Transaction implements Serializable {
 
   /**
@@ -21,52 +22,67 @@ public class Transaction implements Serializable {
    */
   private static final long serialVersionUID = 267029653687795319L;
 
-  @JsonProperty("transaction-id")
+  @JsonProperty(value = "transaction-id", defaultValue = "")
   @ApiModelProperty(value = "Opaque.", required = true, dataType = "String")
   private String transactionId;
 
-  @JsonProperty("account-id")
-  @ApiModelProperty(value = "The bank account the transaction is associated with.", required = true, dataType = "String")
+  @JsonProperty(value = "account-id", defaultValue = "")
+  @ApiModelProperty(value = "The bank account the transaction is associated with.", required = true,
+      dataType = "String")
   private String accountId;
 
-  @JsonProperty("raw-merchant")
-  @ApiModelProperty(value = "Un-prettified merchant string. Should never be displayed to the user.", required = true, dataType = "String")
+  @JsonProperty(value = "raw-merchant", defaultValue = "")
+  @ApiModelProperty(value = "Un-prettified merchant string. Should never be displayed to the user.",
+      required = true, dataType = "String")
   private String rawMerchant;
 
-  @JsonProperty("merchant")
-  @ApiModelProperty(value = "Prettified merchant string. Should always be displayed to the user, even if they aren't using the app or their phone is off.", required = true, dataType = "String")
+  @JsonProperty(value = "merchant", defaultValue = "")
+  @ApiModelProperty(
+      value = "Prettified merchant string. Should always be displayed to the user, even if they aren't using the app or their phone is off.",
+      required = true, dataType = "String")
   private String merchant;
 
-  @JsonProperty("is-pending")
-  @ApiModelProperty(value = "Man don't even get me started. Basically, transactions show up as pending shortly after you swipe your card, and days later they are replaced by similar cleared (i.e. non-pending) transactions with different transaction IDs.", required = true, dataType = "boolean")
+  @JsonProperty(value = "is-pending", defaultValue = "false")
+  @ApiModelProperty(
+      value = "Man don't even get me started. Basically, transactions show up as pending shortly after you swipe your card, and days later they are replaced by similar cleared (i.e. non-pending) transactions with different transaction IDs.",
+      required = true, dataType = "boolean")
   private boolean isPending;
 
-  @JsonProperty("transaction-time")
-  @ApiModelProperty(value = "Our best estimate of the time that you swiped your card.", required = true, dataType = "String")
+  @JsonProperty(value = "transaction-time", defaultValue = "1970-01-01T00:00:00.000Z")
+  @ApiModelProperty(value = "Our best estimate of the time that you swiped your card.",
+      required = true, dataType = "String")
   private String transactionTime;
 
-  @JsonProperty("amount")
-  @ApiModelProperty(value = "Negative amount = debit, positive amount = credit. Centocents. 20000 centocents = $2.", required = true, dataType = "String")
+  @JsonProperty(value = "amount", defaultValue = "0")
+  @ApiModelProperty(
+      value = "Negative amount = debit, positive amount = credit. Centocents. 20000 centocents = $2.",
+      required = true, dataType = "String")
   private long amount;
 
-  @JsonProperty("previous-transaction-id")
-  @ApiModelProperty(value = "When transactions clear, their IDs change for bad reasons. This is the ID the transaction had when it was pending, if any (not all transactions pend, and not all pending transactions are successfully matched with their cleared versions). Read-only", required = true, dataType = "String")
+  @JsonProperty(value = "previous-transaction-id", defaultValue = "")
+  @ApiModelProperty(
+      value = "When transactions clear, their IDs change for bad reasons. This is the ID the transaction had when it was pending, if any (not all transactions pend, and not all pending transactions are successfully matched with their cleared versions). Read-only",
+      required = true, dataType = "String")
   private String previousTransactionId;
 
-  @JsonProperty("categorization")
-  @ApiModelProperty(value = "A vaguely human-readable description of the category of transaction this is (from the aggregator, generally). If you're using one of our example accounts, this'll be \"Unknown\". Sorry.", required = true, dataType = "String")
+  @JsonProperty(value = "categorization", defaultValue = "")
+  @ApiModelProperty(
+      value = "A vaguely human-readable description of the category of transaction this is (from the aggregator, generally). If you're using one of our example accounts, this'll be \"Unknown\". Sorry.",
+      required = true, dataType = "String")
   private String categorization;
 
-  @JsonProperty("memo-only-for-testing")
+  @JsonProperty(value = "memo-only-for-testing", defaultValue = "")
   @ApiModelProperty(value = "ONLY FOR TESTING", required = false, dataType = "String")
   private String memoOnlyForTesting;
 
-  @JsonProperty("payee-name-only-for-testing")
+  @JsonProperty(value = "payee-name-only-for-testing", defaultValue = "")
   @ApiModelProperty(value = "ONLY FOR TESTING", required = false, dataType = "String")
   private String payeeNameOnlyForTesting;
 
-  @JsonProperty("clear-date")
-  @ApiModelProperty(value = "Millisecond timestamp of when we think the transaction cleared. May be in the future. If the transaction is pending, has undefined behavior.", required = true, dataType = "String")
+  @JsonProperty(value = "clear-date", defaultValue = "0")
+  @ApiModelProperty(
+      value = "Millisecond timestamp of when we think the transaction cleared. May be in the future. If the transaction is pending, has undefined behavior.",
+      required = true, dataType = "String")
   private long clearDate;
 
   /**
@@ -236,5 +252,16 @@ public class Transaction implements Serializable {
   public void setClearDate(long clearDate) {
     this.clearDate = clearDate;
   }
+
+  @Override
+  public String toString() {
+    return "Transaction [transactionId=" + transactionId + ", accountId=" + accountId
+        + ", rawMerchant=" + rawMerchant + ", merchant=" + merchant + ", isPending=" + isPending
+        + ", transactionTime=" + transactionTime + ", amount=" + amount + ", previousTransactionId="
+        + previousTransactionId + ", categorization=" + categorization + ", memoOnlyForTesting="
+        + memoOnlyForTesting + ", payeeNameOnlyForTesting=" + payeeNameOnlyForTesting
+        + ", clearDate=" + clearDate + "]";
+  }
+
 
 }
