@@ -20,7 +20,7 @@ mvn spring-boot:run
 ```
 2.  To run this project utilizing the Java JAR file, simply go to the project directory and run the below command from project directory
 ```script
-java -jar target/app-coding-exercise-1.0.0-SNAPSHOT.jar
+java -jar target/app-coding-exercise-1.0.1-SNAPSHOT.jar
 ```
 
 #### Testing Application
@@ -41,6 +41,7 @@ URI - ```http://localhost:8080/coreapi/getAverages```<br/>
 cURL command - ```curl -X GET http://localhost:8080/coreapi/getAverages```
 
 ## Versions
+The versions mentioned below are oldest to latest. <br/>
 *   1.0.0-SNAPSHOT: Release with `getAllTransactions` and `getAverages` methods.
 *   1.0.1-SNAPSHOT: Release with `ignoreDonuts` methods.
 
