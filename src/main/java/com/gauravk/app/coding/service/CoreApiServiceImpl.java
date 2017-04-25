@@ -24,14 +24,16 @@ import com.gauravk.app.coding.model.Transaction;
 public class CoreApiServiceImpl implements CoreApiService {
 
   private static final Logger logger = LoggerFactory.getLogger(CoreApiController.class);
- 
+
   /**
-   * @param transactions
-   * @return
+   * This is implementation for calculating the averages for provided transactions.
+   * 
+   * @param transactions - Provided transactions for which average needs to be computed.
+   * @return Map<String, List<CoreApiStatement>> - A map containing the averages for each month from
+   *         provided transactions.
    */
   @Override
-  public Map<String, List<CoreApiStatement>> calculateAverages(
-      CoreApiTransactionsResponse transactions) {
+  public Map<String, List<CoreApiStatement>> getAverages(CoreApiTransactionsResponse transactions) {
 
     Map<String, List<CoreApiStatement>> monthlyStatementMap =
         new HashMap<String, List<CoreApiStatement>>(transactions.getTransactions().size());
@@ -80,8 +82,10 @@ public class CoreApiServiceImpl implements CoreApiService {
   }
 
   /**
-   * @param statements
-   * @return
+   * This method calculates average for provided monthly statements.
+   * 
+   * @param statements - Statements containing expenses and income for each month.
+   * @return List<CoreApiStatement> - A list containing average amounts for each month.
    */
   private List<CoreApiStatement> calculateAverage(List<CoreApiStatement> statements) {
     long spentSum = 0L;
@@ -102,8 +106,10 @@ public class CoreApiServiceImpl implements CoreApiService {
   }
 
   /**
-   * @param centocents
-   * @return
+   * This method is used for converting centocents to dollars.
+   * 
+   * @param centocents - Value to be converted.
+   * @return long - Converted amount in dollars without the currency declaration.
    */
   private long centocentsToDollars(long centocents) {
     return centocents / 10000L;

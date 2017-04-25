@@ -14,9 +14,12 @@ import com.gauravk.app.coding.model.CoreApiTransactionsResponse;
 public interface CoreApiService {
 
   /**
-   * @param transactions
-   * @return
+   * This method will be implemented for calculating the averages for provided transactions.
+   * 
+   * @param transactions - Provided transactions for which average needs to be computed.
+   * @return Map<String, List<CoreApiStatement>> - A map containing the averages for each month from
+   *         provided transactions.
    */
-  Map<String, List<CoreApiStatement>> calculateAverages(CoreApiTransactionsResponse transactions);
+  Map<String, List<CoreApiStatement>> getAverages(CoreApiTransactionsResponse transactions);
 
 }

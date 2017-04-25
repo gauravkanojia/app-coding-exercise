@@ -47,16 +47,22 @@ public class CoreApiController {
   private CoreApiService service;
 
   /**
-   * @return
+   * This method is used for testing if the application is up or not.
+   * 
+   * @return A string with success message.
    */
   @RequestMapping(method = RequestMethod.GET, value = "/test")
   public String getTestApplication() {
     logger.info("Inside Test Application");
-    return String.format("Your Spring Boot Application is up! Try running other methods. Check README for more details.");
+    return String.format(
+        "Your Spring Boot Application is up! Try running other methods. Check README for more details.");
   }
 
   /**
-   * @return
+   * This method is used for consuming the CoreAPI in the background and then display all the
+   * transactions when invoked.
+   * 
+   * @return All the transactions from CoreAPI.
    */
   @RequestMapping(method = RequestMethod.GET, value = "/getAllTransactions")
   public CoreApiTransactionsResponse getAllTransactions() {
@@ -73,7 +79,10 @@ public class CoreApiController {
   }
 
   /**
-   * @return
+   * This method is used for get the monthly averages from the transactions.
+   * 
+   * @return A string denoting expenses and income averages for each month provided in the
+   *         transactions.
    */
   @RequestMapping(method = RequestMethod.GET, value = "/getAverages")
   public String getAverages() {
@@ -88,15 +97,17 @@ public class CoreApiController {
     service = new CoreApiServiceImpl();
     logger.info("Leaving getAverages");
 
-    Map<String, List<CoreApiStatement>> averagesMap = service.calculateAverages(allTransactions);
+    Map<String, List<CoreApiStatement>> averagesMap = service.getAverages(allTransactions);
 
     return getMonthlyAveragesDataAsString(averagesMap);
   }
 
 
   /**
+   * This method returns a {@link RestTemplate} when called.
+   * 
    * @param restTemplateBuilder
-   * @return
+   * @return RestTemplate
    */
   @Bean
   public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
@@ -108,7 +119,7 @@ public class CoreApiController {
    * onto the console which are consumed from CoreAPI. Kept this for testing purposes.
    * 
    * @param restTemplate
-   * @return
+   * @return CommandLineRunner
    * @throws Exception
    */
   @Bean
@@ -126,7 +137,7 @@ public class CoreApiController {
   /**
    * This method is used for setting the header values for consuming the Core API.
    * 
-   * @return - HttpHeaders
+   * @return HttpHeaders - created HttpHeaders
    */
   private HttpHeaders getRequestHeaders() {
 
@@ -158,8 +169,11 @@ public class CoreApiController {
   }
 
   /**
-   * @param averagesMap
-   * @return
+   * This is a utility method which converts the Map into a string to return it as expected format
+   * for printing the averages for month.
+   * 
+   * @param averagesMap - Map containing average values for transactions done each month.
+   * @return String containing averages in given format
    */
   private String getMonthlyAveragesDataAsString(Map<String, List<CoreApiStatement>> averagesMap) {
 
