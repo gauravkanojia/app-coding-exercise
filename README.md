@@ -23,12 +23,19 @@ mvn spring-boot:run
 java -jar target/app-coding-exercise-1.0.0-SNAPSHOT.jar
 ```
 
-*URL for Getting all transactions* <br/>
+##### Testing Application
+Want to check if application is up? Simply paste this URL in browser.
+URL - ```http://localhost:8080/coreapi/test```
+
+Expected Output: ```Your Spring Boot Application is up! Try running other methods. Check README for more details.```
+
+##### Methods List -
+*   URL for *Getting all transactions* <br/>
 Operation -  **POST** <br/>
 URI - ```http://localhost:8080/coreapi/getAllTransactions```<br/>
 cURL command - ```curl -X POST http://localhost:8080/coreapi/getAllTransactions```
 
-*URL for Getting Average Expenses and Income* <br/>
+*   URL for *Getting Average Monthly Expenses and Income* <br/>
 Operation - **GET** <br/>
 URI - ```http://localhost:8080/coreapi/getAverages```<br/>
 cURL command - ```curl -X GET http://localhost:8080/coreapi/getAverages```
@@ -40,3 +47,6 @@ i.  Consuming a RESTful Web Service: Use [this](https://spring.io/guides/gs/cons
 ### Notes
 1.  Spring STS has been used to develop this project.
 2.  This project was tested as Spring-Boot Application as well as a runnable JAR file.
+3.  JUnit test classes have not been written for this project.
+4.  Have shown documentation framework, Swagger Implementation in some of the model classes.
+5.  Reach out to me: gisgaurav@gmail.com
