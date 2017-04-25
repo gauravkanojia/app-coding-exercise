@@ -40,11 +40,15 @@ Operation - **GET** <br/>
 URI - ```http://localhost:8080/coreapi/getAverages```<br/>
 cURL command - ```curl -X GET http://localhost:8080/coreapi/getAverages```
 
+## Versions
+*   1.0.0-SNAPSHOT: Release with `getAllTransactions` and `getAverages` methods.
+*   1.0.1-SNAPSHOT: Release with `ignoreDonuts` methods.
+
 ## Useful Links
 1.  Spring Project Website: Use [this](https://spring.io/) link.  
 i.  Consuming a RESTful Web Service: Use [this](https://spring.io/guides/gs/consuming-rest/) link.
 
-### Notes
+## Notes
 1.  Spring STS has been used to develop this project.
 2.  This project was tested as Spring-Boot Application as well as a runnable JAR file.
 3.  JUnit test classes have not been written for this project.
