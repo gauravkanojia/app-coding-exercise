@@ -18,6 +18,16 @@ public class CoreApiStatement implements Serializable {
 
   private static final long serialVersionUID = 4879745013754030623L;
 
+  public CoreApiStatement() {
+    super();
+  }
+
+  public CoreApiStatement(long spent, long income) {
+    super();
+    this.spent = spent;
+    this.income = income;
+  }
+
   @JsonProperty(value = "spent", defaultValue = "0")
   private long spent;
 

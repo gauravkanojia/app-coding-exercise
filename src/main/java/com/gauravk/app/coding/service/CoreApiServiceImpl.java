@@ -66,17 +66,34 @@ public class CoreApiServiceImpl implements CoreApiService {
         monthlyStatementMap.put(yearMonth, statements);
       }
 
-      // Make second pass in which we calculate the monthly averages of the expenses and income
+      // Make second pass in which we calculate the monthly sums for the expenses and income
       for (Map.Entry<String, List<CoreApiStatement>> keyEntry : monthlyStatementMap.entrySet()) {
-        List<CoreApiStatement> averageStatments = calculateAverage(keyEntry.getValue());
-        averageMonthlyStatementMap.put(keyEntry.getKey(), averageStatments);
+        List<CoreApiStatement> monthlyStatments = calculateMonthlySum(keyEntry.getValue());
+        averageMonthlyStatementMap.put(keyEntry.getKey(), monthlyStatments);
       }
+      
+      List<CoreApiStatement> averageOfAllStatements = new ArrayList<CoreApiStatement>();
+      long totalSpent = 0L;
+      long totalEarned = 0L;
+      int numberOfStatements = 0;
+      // We got the monthly sum from above step, now calculating averages for all the months
+      for (Map.Entry<String, List<CoreApiStatement>> keyEntry : averageMonthlyStatementMap.entrySet()) {
+        List<CoreApiStatement> monthlySumStatements = keyEntry.getValue();
+        for (CoreApiStatement monthlySumStatement : monthlySumStatements) {
+          totalEarned += monthlySumStatement.getIncome();
+          totalSpent += monthlySumStatement.getSpent();
+          numberOfStatements++;
+        }
+      }
+      CoreApiStatement averageOfAllExpenseIncome = new CoreApiStatement(totalSpent / numberOfStatements, totalEarned / numberOfStatements);
+      averageOfAllStatements.add(averageOfAllExpenseIncome);
+      averageMonthlyStatementMap.put("average", averageOfAllStatements);
+
     }
 
     // For printing the averages in sorted manner.
-    Map<String, List<CoreApiStatement>> monthlyAveragesTreeMap =
-        new TreeMap<String, List<CoreApiStatement>>(averageMonthlyStatementMap);
-    logger.info("Monthly averages: {}", monthlyAveragesTreeMap);
+    Map<String, List<CoreApiStatement>> monthlyAveragesTreeMap = new TreeMap<String, List<CoreApiStatement>>(averageMonthlyStatementMap);
+    logger.info("Monthly sums and average of total: {}", monthlyAveragesTreeMap);
 
 
     return monthlyAveragesTreeMap;
@@ -108,22 +125,24 @@ public class CoreApiServiceImpl implements CoreApiService {
    * @param statements - Statements containing expenses and income for each month.
    * @return List<CoreApiStatement> - A list containing average amounts for each month.
    */
-  private List<CoreApiStatement> calculateAverage(List<CoreApiStatement> statements) {
+  private List<CoreApiStatement> calculateMonthlySum(List<CoreApiStatement> statements) {
     long spentSum = 0L;
     long incomeSum = 0L;
-    List<CoreApiStatement> averages = new ArrayList<CoreApiStatement>();
+    List<CoreApiStatement> allMonthlySums = new ArrayList<CoreApiStatement>();
 
     for (CoreApiStatement statement : statements) {
-      spentSum += statement.getSpent();
+      // Getting absolute value to be shown as expenses, without negative sign
+      spentSum += Math.abs(statement.getSpent());
       incomeSum += statement.getIncome();
     }
 
-    CoreApiStatement averageStatement = new CoreApiStatement();
-    averageStatement.setIncome(centocentsToDollars(incomeSum) / statements.size());
-    averageStatement.setSpent(centocentsToDollars(spentSum) / statements.size());
-    averages.add(averageStatement);
+    CoreApiStatement monthlyStatementSum = new CoreApiStatement();
+    // / statements.size()
+    monthlyStatementSum.setIncome(centocentsToDollars(incomeSum));
+    monthlyStatementSum.setSpent(centocentsToDollars(spentSum));
+    allMonthlySums.add(monthlyStatementSum);
 
-    return averages;
+    return allMonthlySums;
   }
 
   /**

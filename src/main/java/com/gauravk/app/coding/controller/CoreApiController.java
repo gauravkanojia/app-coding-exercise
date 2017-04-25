@@ -191,8 +191,11 @@ public class CoreApiController {
   private String getMonthlyAveragesDataAsString(Map<String, List<CoreApiStatement>> averagesMap) {
 
     StringBuilder averageStringOutput = new StringBuilder();
-
+    int numberOfStatements = averagesMap.size();
+    logger.info("Averages Map Size: {}", averagesMap.size());
     // {"2014-10": {"spent": "$200.00", "income": "$500.00"},
+    averageStringOutput.append("{");
+    
     for (Map.Entry<String, List<CoreApiStatement>> entry : averagesMap.entrySet()) {
       for (CoreApiStatement statement : entry.getValue()) {
         // Formatter to print amounts with Dollar Currency Sign
@@ -200,9 +203,16 @@ public class CoreApiController {
         averageStringOutput.append("{\"").append(entry.getKey())
                            .append("\": {\"spent\": \"").append(decimalFormatter.format(statement.getSpent()))
                            .append("\", \"income\": \"").append(decimalFormatter.format(statement.getIncome()))
-                           .append("\"}").append(org.apache.commons.lang3.StringUtils.LF);
+                           .append("\"}");
+        
+        if(numberOfStatements > 1){
+          averageStringOutput.append(",").append(org.apache.commons.lang3.StringUtils.LF);
+          numberOfStatements--;
+        }
       }
     }
+    
+    averageStringOutput.append("}");
 
     return averageStringOutput.toString();
   }
