@@ -2,6 +2,10 @@
 This repository will be used to track and store code base for app-coding-exercise.<br/>
 This is a Maven-based Spring Boot application, which is used for consuming an API. The docs for the API being consumed are present at [this](https://doc.level-labs.com/) link.
 
+## Pre-requisites
+1.  The environment where this project will be run should have Java 8 setup with environment variables.
+2.  The environment should have Maven build tool configured for building the project and running the project as `Spring-Boot` application. This step is important because unless the code is built, the corresponding JAR file will not be present and the application won't run as a Java JAR or as a `Spring-Boot` application.
+
 ## Build Process
 As this is a Maven-based project, the dependencies and build properties are mentioned in the parent `pom.xml` file. To build the project, simply run the below command in the parent directory where `pom.xml` is present.
 
@@ -12,9 +16,11 @@ mvn -U clean install
 Above command will build the project for the mentioned dependencies and will package it into a JAR file which can be run as any other Java JAR file.
 
 
-## Running the project
-Since this is a spring-boot project, it can be ran in two ways.<br/>
-1.  To run this project utilizing Spring-Boot feature, simply go to the project directory and run the below command
+## Running the application
+
+#### Steps for running the project
+Since this is a `Spring-Boot` project, it can be run in two ways -<br/>
+1.  To run this project utilizing `Spring-Boot` feature, simply go to the project directory and run the below command
 ```script
 mvn spring-boot:run
 ```
@@ -31,14 +37,19 @@ Expected Output: ```Your Spring Boot Application is up! Try running other method
 
 #### Methods List -
 *   URL for *Getting all transactions* <br/>
-Operation -  **POST** <br/>
+Operation -  **GET** <br/>
 URI - ```http://localhost:8080/coreapi/getAllTransactions```<br/>
-cURL command - ```curl -X POST http://localhost:8080/coreapi/getAllTransactions```
+cURL command - ```curl -X GET http://localhost:8080/coreapi/getAllTransactions```
 
 *   URL for *Getting Average Monthly Expenses and Income* <br/>
 Operation - **GET** <br/>
 URI - ```http://localhost:8080/coreapi/getAverages```<br/>
 cURL command - ```curl -X GET http://localhost:8080/coreapi/getAverages```
+
+*   URL for *Ignore Donuts from All Transactions* <br/>
+Operation - **GET** <br/>
+URI - ```http://localhost:8080/coreapi/ignoreDonuts```<br/>
+cURL command - ```curl -X GET http://localhost:8080/coreapi/ignoreDonuts```
 
 ## Versions
 The versions mentioned below are oldest to latest. <br/>
@@ -46,12 +57,13 @@ The versions mentioned below are oldest to latest. <br/>
 *   1.0.1-SNAPSHOT: Release with `ignoreDonuts` methods.
 
 ## Useful Links
-1.  Spring Project Website: Use [this](https://spring.io/) link.  
-i.  Consuming a RESTful Web Service: Use [this](https://spring.io/guides/gs/consuming-rest/) link.
+*   Spring Project Website: Use [this](https://spring.io/) link.  
+*   Consuming a RESTful Web Service: Use [this](https://spring.io/guides/gs/consuming-rest/) link.
 
 ## Notes
 1.  Spring STS has been used to develop this project.
 2.  This project was tested as Spring-Boot Application as well as a runnable JAR file.
+3.  As the backend API is not consumable through a VPN, please make sure you're not on any VPN while running the application.
 3.  JUnit test classes have not been written for this project.
 4.  Have shown documentation framework, Swagger Implementation in some of the model classes.
 5.  Reach out to me: gisgaurav@gmail.com
