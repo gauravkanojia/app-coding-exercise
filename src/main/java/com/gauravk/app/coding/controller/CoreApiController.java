@@ -95,13 +95,26 @@ public class CoreApiController {
         restTemplate.exchange(uri, HttpMethod.POST, entity, CoreApiTransactionsResponse.class);
     CoreApiTransactionsResponse allTransactions = response.getBody();
     service = new CoreApiServiceImpl();
-    logger.info("Leaving getAverages");
-
     Map<String, List<CoreApiStatement>> averagesMap = service.getAverages(allTransactions);
-
+    logger.info("Leaving getAverages");
+    
     return getMonthlyAveragesDataAsString(averagesMap);
   }
 
+  @RequestMapping(method = RequestMethod.GET, value = "/ignoreDonuts")
+  public CoreApiTransactionsResponse getIgnoreDonuts() {
+    logger.info("Inside ignoreDonuts");
+    HttpEntity<CoreApiRequestBody> entity =
+        new HttpEntity<CoreApiRequestBody>(getRequestBody(), getRequestHeaders());
+    restTemplate = new RestTemplate();
+    ResponseEntity<CoreApiTransactionsResponse> response =
+        restTemplate.exchange(uri, HttpMethod.POST, entity, CoreApiTransactionsResponse.class);
+    CoreApiTransactionsResponse allTransactions = response.getBody();
+    service = new CoreApiServiceImpl();
+    logger.info("Leaving ignoreDonuts");
+    
+    return service.ignoreDonuts(allTransactions);
+  }
 
   /**
    * This method returns a {@link RestTemplate} when called.

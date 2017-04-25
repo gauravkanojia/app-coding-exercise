@@ -22,4 +22,13 @@ public interface CoreApiService {
    */
   Map<String, List<CoreApiStatement>> getAverages(CoreApiTransactionsResponse transactions);
 
+  /**
+   * This method will be implemented for filtering out the transactions that are related to donuts.
+   * 
+   * @param coreApiTransactionsResponse - All the transactions from CoreAPI.
+   * @return CoreApiTransactionsResponse - This response will be filtered response which contains no
+   *         donut transactions.
+   */
+  CoreApiTransactionsResponse ignoreDonuts(CoreApiTransactionsResponse coreApiTransactionsResponse);
+
 }

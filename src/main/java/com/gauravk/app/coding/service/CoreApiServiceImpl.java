@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,10 +76,30 @@ public class CoreApiServiceImpl implements CoreApiService {
     // For printing the averages in sorted manner.
     Map<String, List<CoreApiStatement>> monthlyAveragesTreeMap =
         new TreeMap<String, List<CoreApiStatement>>(averageMonthlyStatementMap);
-    logger.info("Averages: {}", monthlyAveragesTreeMap);
+    logger.info("Monthly averages: {}", monthlyAveragesTreeMap);
 
 
     return monthlyAveragesTreeMap;
+  }
+
+  @Override
+  public CoreApiTransactionsResponse ignoreDonuts(
+      CoreApiTransactionsResponse coreApiTransactionsResponse) {
+    CoreApiTransactionsResponse filteredResponse = new CoreApiTransactionsResponse();
+    List<Transaction> transactionsList = new ArrayList<Transaction>();
+
+    // Get merchant for all transactions and exclude the transaction if it's related to donuts in
+    // any way.
+    for (Transaction transaction : coreApiTransactionsResponse.getTransactions()) {
+      String merchant = transaction.getMerchant();
+      if (!(StringUtils.contains(merchant, "Dunkin") || StringUtils.contains(merchant, "Donuts"))) {
+        transactionsList.add(transaction);
+      }
+    }
+    filteredResponse.setTransactions(transactionsList);
+    logger.info("Filtered transactions: {}", filteredResponse);
+
+    return filteredResponse;
   }
 
   /**
