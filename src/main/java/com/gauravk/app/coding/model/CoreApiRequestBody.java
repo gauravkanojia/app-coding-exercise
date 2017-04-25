@@ -38,6 +38,4 @@ public class CoreApiRequestBody implements Serializable {
   public String toString() {
     return "CoreApiRequestBody [args=" + args + "]";
   }
-
-
 }
