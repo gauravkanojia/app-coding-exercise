@@ -17,9 +17,6 @@ import io.swagger.annotations.ApiModelProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Transaction implements Serializable {
 
-  /**
-   * 
-   */
   private static final long serialVersionUID = 267029653687795319L;
 
   @JsonProperty(value = "transaction-id", defaultValue = "")
@@ -262,6 +259,4 @@ public class Transaction implements Serializable {
         + memoOnlyForTesting + ", payeeNameOnlyForTesting=" + payeeNameOnlyForTesting
         + ", clearDate=" + clearDate + "]";
   }
-
-
 }

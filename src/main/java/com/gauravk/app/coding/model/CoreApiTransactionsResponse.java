@@ -17,15 +17,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CoreApiTransactionsResponse implements Serializable {
 
-  /**
-   * 
-   */
   private static final long serialVersionUID = 8502656030616503394L;
 
-  @JsonProperty("error")
+  @JsonProperty(value = "error", defaultValue = "no-error")
   private String error;
 
-  @JsonProperty("transactions")
+  @JsonProperty(value = "transactions", defaultValue = "")
   private List<Transaction> transactions;
 
 
