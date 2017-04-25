@@ -3,8 +3,10 @@
  */
 package com.gauravk.app.coding.controller;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,14 +20,15 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.gauravk.app.coding.model.CoreApiRequestBody;
 import com.gauravk.app.coding.model.CoreApiRequestCommonArguments;
+import com.gauravk.app.coding.model.CoreApiStatement;
 import com.gauravk.app.coding.model.CoreApiTransactionsResponse;
-import com.gauravk.app.coding.model.Transaction;
+import com.gauravk.app.coding.service.CoreApiService;
+import com.gauravk.app.coding.service.CoreApiServiceImpl;
 
 /**
  * @author Gaurav Kanojia
@@ -39,21 +42,29 @@ public class CoreApiController {
 
   private final String uri = "https://2016.api.levelmoney.com/api/v2/core/get-all-transactions";
 
-  private RestTemplate restTemplate = new RestTemplate();
+  private RestTemplate restTemplate;
 
-  @RequestMapping(method = RequestMethod.GET, value = "/greeting")
-  public String getGreeting(@RequestParam(value = "name", defaultValue = "World") String name) {
-    logger.info("Inside Greeting");
-    return String.format("Greetings from Spring Boot! This is %s.", name);
+  private CoreApiService service;
+
+  /**
+   * @return
+   */
+  @RequestMapping(method = RequestMethod.GET, value = "/test")
+  public String getTestApplication() {
+    logger.info("Inside Test Application");
+    return String.format("Your Spring Boot Application is up! Try running other methods. Check README for more details.");
   }
 
-  @RequestMapping(method = RequestMethod.POST, value = "/getAllTransactions")
+  /**
+   * @return
+   */
+  @RequestMapping(method = RequestMethod.GET, value = "/getAllTransactions")
   public CoreApiTransactionsResponse getAllTransactions() {
 
     logger.info("Inside getAllTransactions");
-
     HttpEntity<CoreApiRequestBody> entity =
         new HttpEntity<CoreApiRequestBody>(getRequestBody(), getRequestHeaders());
+    restTemplate = new RestTemplate();
     ResponseEntity<CoreApiTransactionsResponse> response =
         restTemplate.exchange(uri, HttpMethod.POST, entity, CoreApiTransactionsResponse.class);
     logger.info("Leaving getAllTransactions");
@@ -61,30 +72,40 @@ public class CoreApiController {
     return response.getBody();
   }
 
+  /**
+   * @return
+   */
   @RequestMapping(method = RequestMethod.GET, value = "/getAverages")
-  public CoreApiTransactionsResponse getAverages(
-      @RequestParam(value = "name", defaultValue = "World") String name) {
-    logger.info("Inside getAverages");
+  public String getAverages() {
 
+    logger.info("Inside getAverages");
     HttpEntity<CoreApiRequestBody> entity =
         new HttpEntity<CoreApiRequestBody>(getRequestBody(), getRequestHeaders());
+    restTemplate = new RestTemplate();
     ResponseEntity<CoreApiTransactionsResponse> response =
         restTemplate.exchange(uri, HttpMethod.POST, entity, CoreApiTransactionsResponse.class);
     CoreApiTransactionsResponse allTransactions = response.getBody();
+    service = new CoreApiServiceImpl();
     logger.info("Leaving getAverages");
 
-    return calculateAverages(allTransactions);
+    Map<String, List<CoreApiStatement>> averagesMap = service.calculateAverages(allTransactions);
+
+    return getMonthlyAveragesDataAsString(averagesMap);
   }
 
 
+  /**
+   * @param restTemplateBuilder
+   * @return
+   */
   @Bean
   public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
     return restTemplateBuilder.build();
   }
 
   /**
-   * This method is ran when Spring-Boot application is brought up and print all the transactions
-   * onto the console.
+   * This method is ran when Spring-Boot application is brought up and prints all the transactions
+   * onto the console which are consumed from CoreAPI. Kept this for testing purposes.
    * 
    * @param restTemplate
    * @return
@@ -98,7 +119,6 @@ public class CoreApiController {
           new HttpEntity<CoreApiRequestBody>(getRequestBody(), getRequestHeaders());
       ResponseEntity<CoreApiTransactionsResponse> response =
           restTemplate.exchange(uri, HttpMethod.POST, entity, CoreApiTransactionsResponse.class);
-
       logger.info(response.getBody().toString());
     };
   }
@@ -137,13 +157,26 @@ public class CoreApiController {
     return requestBody;
   }
 
-  private CoreApiTransactionsResponse calculateAverages(CoreApiTransactionsResponse transactions) {
-    CoreApiTransactionsResponse averages = new CoreApiTransactionsResponse();
+  /**
+   * @param averagesMap
+   * @return
+   */
+  private String getMonthlyAveragesDataAsString(Map<String, List<CoreApiStatement>> averagesMap) {
 
-    for (Transaction transaction : transactions.getTransactions()) {
+    StringBuilder averageStringOutput = new StringBuilder();
 
+    // {"2014-10": {"spent": "$200.00", "income": "$500.00"},
+    for (Map.Entry<String, List<CoreApiStatement>> entry : averagesMap.entrySet()) {
+      for (CoreApiStatement statement : entry.getValue()) {
+        // Formatter to print amounts with Dollar Currency Sign
+        DecimalFormat decimalFormatter = new DecimalFormat("$#,##0.00;-$#,##0.00");
+        averageStringOutput.append("{\"").append(entry.getKey())
+                           .append("\": {\"spent\": \"").append(decimalFormatter.format(statement.getSpent()))
+                           .append("\", \"income\": \"").append(decimalFormatter.format(statement.getIncome()))
+                           .append("\"}").append(org.apache.commons.lang3.StringUtils.LF);
+      }
     }
 
-    return averages;
+    return averageStringOutput.toString();
   }
 }
