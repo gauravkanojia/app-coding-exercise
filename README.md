@@ -23,13 +23,13 @@ mvn spring-boot:run
 java -jar target/app-coding-exercise-1.0.0-SNAPSHOT.jar
 ```
 
-##### Testing Application
+#### Testing Application
 Want to check if application is up? Simply paste this URL in browser.
 URL - ```http://localhost:8080/coreapi/test```
 
 Expected Output: ```Your Spring Boot Application is up! Try running other methods. Check README for more details.```
 
-##### Methods List -
+#### Methods List -
 *   URL for *Getting all transactions* <br/>
 Operation -  **POST** <br/>
 URI - ```http://localhost:8080/coreapi/getAllTransactions```<br/>
