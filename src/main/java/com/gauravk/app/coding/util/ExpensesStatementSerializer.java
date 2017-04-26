@@ -30,7 +30,7 @@ public class ExpensesStatementSerializer extends StdSerializer<CoreApiExpensesSt
 
   @Override
   public void serialize(CoreApiExpensesStatement expensesStmt, JsonGenerator jGen,
-      SerializerProvider arg2) throws IOException, JsonProcessingException {
+      SerializerProvider provider) throws IOException, JsonProcessingException {
 
     DecimalFormat decimalFormatter = new DecimalFormat("$#,##0.00;-$#,##0.00");
     jGen.writeStartObject();
