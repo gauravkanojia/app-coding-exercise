@@ -6,6 +6,20 @@ This is a Maven-based Spring Boot application, which is used for consuming an AP
 1.  The environment where this project will be run should have Java 8 setup with environment variables.
 2.  The environment should have Maven build tool configured for building the project and running the project as `Spring-Boot` application. This step is important because unless the code is built, the corresponding JAR file will not be present and the application won't run as a Java JAR or as a `Spring-Boot` application.
 
+## Getting the code
+
+To get the code on your local machine, you can either fork the repository and then clone it, or you can clone this repository using the below command.
+
+```script
+git clone https://github.com/gauravkanojia/app-coding-exercise.git
+```
+
+Changes can be pushed through a pull request and will be reviewed before merging them to the main (master) repository.
+
+For `Forking` this repository, simply click on the <!-- Place this tag where you want the button to render. -->
+<a class="github-button" href="https://github.com/ntkme/github-buttons/fork" data-icon="octicon-repo-forked" data-style="mega" data-show-count="true" aria-label="Fork ntkme/github-buttons on GitHub">Fork</a> button on the top right corner.
+
+
 ## Build Process
 As this is a Maven-based project, the dependencies and build properties are mentioned in the parent `pom.xml` file. To build the project, simply run the below command in the parent directory where `pom.xml` is present.
 
