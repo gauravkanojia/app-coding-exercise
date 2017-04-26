@@ -3,10 +3,7 @@
  */
 package com.gauravk.app.coding.controller;
 
-import java.text.DecimalFormat;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,11 +18,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.gauravk.app.coding.model.CoreApiRequestBody;
 import com.gauravk.app.coding.model.CoreApiRequestCommonArguments;
-import com.gauravk.app.coding.model.CoreApiStatement;
 import com.gauravk.app.coding.model.CoreApiTransactionsResponse;
 import com.gauravk.app.coding.service.CoreApiService;
 import com.gauravk.app.coding.service.CoreApiServiceImpl;
@@ -54,8 +51,7 @@ public class CoreApiController {
   @RequestMapping(method = RequestMethod.GET, value = "/test")
   public String getTestApplication() {
     logger.info("Inside Test Application");
-    return String.format(
-        "Your Spring Boot Application is up! Try running other methods. Check README for more details.");
+    return String.format("Your Spring Boot Application is up! Try running other methods. Check README for more details.");
   }
 
   /**
@@ -68,11 +64,15 @@ public class CoreApiController {
   public CoreApiTransactionsResponse getAllTransactions() {
 
     logger.info("Inside getAllTransactions");
-    HttpEntity<CoreApiRequestBody> entity =
-        new HttpEntity<CoreApiRequestBody>(getRequestBody(), getRequestHeaders());
+    HttpEntity<CoreApiRequestBody> entity = new HttpEntity<CoreApiRequestBody>(getRequestBody(), getRequestHeaders());
     restTemplate = new RestTemplate();
-    ResponseEntity<CoreApiTransactionsResponse> response =
-        restTemplate.exchange(uri, HttpMethod.POST, entity, CoreApiTransactionsResponse.class);
+    ResponseEntity<CoreApiTransactionsResponse> response = null;
+
+    try {
+      response = restTemplate.exchange(uri, HttpMethod.POST, entity, CoreApiTransactionsResponse.class);
+    } catch (RestClientException restClientEx) {
+      logger.error("Rest Client Exception occured while getting all transactions: {}", restClientEx.fillInStackTrace());
+    }
     logger.info("Leaving getAllTransactions");
 
     return response.getBody();
@@ -88,31 +88,42 @@ public class CoreApiController {
   public String getAverages() {
 
     logger.info("Inside getAverages");
-    HttpEntity<CoreApiRequestBody> entity =
-        new HttpEntity<CoreApiRequestBody>(getRequestBody(), getRequestHeaders());
+    HttpEntity<CoreApiRequestBody> entity = new HttpEntity<CoreApiRequestBody>(getRequestBody(), getRequestHeaders());
     restTemplate = new RestTemplate();
-    ResponseEntity<CoreApiTransactionsResponse> response =
-        restTemplate.exchange(uri, HttpMethod.POST, entity, CoreApiTransactionsResponse.class);
+    ResponseEntity<CoreApiTransactionsResponse> response = null;
+
+    try {
+      response = restTemplate.exchange(uri, HttpMethod.POST, entity, CoreApiTransactionsResponse.class);
+    } catch (RestClientException restClientEx) {
+      logger.error("Rest Client Exception occured while getting averages: {}", restClientEx.fillInStackTrace());
+    }
+
     CoreApiTransactionsResponse allTransactions = response.getBody();
     service = new CoreApiServiceImpl();
-    Map<String, List<CoreApiStatement>> averagesMap = service.getAverages(allTransactions);
     logger.info("Leaving getAverages");
-    
-    return getMonthlyAveragesDataAsString(averagesMap);
+
+    return service.getAverages(allTransactions);
+
   }
 
   @RequestMapping(method = RequestMethod.GET, value = "/ignoreDonuts")
   public CoreApiTransactionsResponse getIgnoreDonuts() {
+
     logger.info("Inside ignoreDonuts");
-    HttpEntity<CoreApiRequestBody> entity =
-        new HttpEntity<CoreApiRequestBody>(getRequestBody(), getRequestHeaders());
+    HttpEntity<CoreApiRequestBody> entity = new HttpEntity<CoreApiRequestBody>(getRequestBody(), getRequestHeaders());
     restTemplate = new RestTemplate();
-    ResponseEntity<CoreApiTransactionsResponse> response =
-        restTemplate.exchange(uri, HttpMethod.POST, entity, CoreApiTransactionsResponse.class);
+    ResponseEntity<CoreApiTransactionsResponse> response = null;
+
+    try {
+      response = restTemplate.exchange(uri, HttpMethod.POST, entity, CoreApiTransactionsResponse.class);
+    } catch (RestClientException restClientEx) {
+      logger.error("Rest Client Exception occured while ignoring donuts: {}", restClientEx.fillInStackTrace());
+    }
+
     CoreApiTransactionsResponse allTransactions = response.getBody();
     service = new CoreApiServiceImpl();
     logger.info("Leaving ignoreDonuts");
-    
+
     return service.ignoreDonuts(allTransactions);
   }
 
@@ -139,10 +150,15 @@ public class CoreApiController {
   public CommandLineRunner run(RestTemplate restTemplate) throws Exception {
     return args -> {
 
-      HttpEntity<CoreApiRequestBody> entity =
-          new HttpEntity<CoreApiRequestBody>(getRequestBody(), getRequestHeaders());
-      ResponseEntity<CoreApiTransactionsResponse> response =
-          restTemplate.exchange(uri, HttpMethod.POST, entity, CoreApiTransactionsResponse.class);
+      HttpEntity<CoreApiRequestBody> entity = new HttpEntity<CoreApiRequestBody>(getRequestBody(), getRequestHeaders());
+      ResponseEntity<CoreApiTransactionsResponse> response = null;
+
+      try {
+        response = restTemplate.exchange(uri, HttpMethod.POST, entity, CoreApiTransactionsResponse.class);
+      } catch (RestClientException restClientEx) {
+        logger.error("Rest Client Exception occured while ignoring donuts: {}", restClientEx.fillInStackTrace());
+      }
+
       logger.info(response.getBody().toString());
     };
   }
@@ -179,41 +195,5 @@ public class CoreApiController {
     requestBody.setArgs(arguments);
 
     return requestBody;
-  }
-
-  /**
-   * This is a utility method which converts the Map into a string to return it as expected format
-   * for printing the averages for month.
-   * 
-   * @param averagesMap - Map containing average values for transactions done each month.
-   * @return String containing averages in given format
-   */
-  private String getMonthlyAveragesDataAsString(Map<String, List<CoreApiStatement>> averagesMap) {
-
-    StringBuilder averageStringOutput = new StringBuilder();
-    int numberOfStatements = averagesMap.size();
-    logger.info("Averages Map Size: {}", averagesMap.size());
-    // {"2014-10": {"spent": "$200.00", "income": "$500.00"},
-    averageStringOutput.append("{");
-    
-    for (Map.Entry<String, List<CoreApiStatement>> entry : averagesMap.entrySet()) {
-      for (CoreApiStatement statement : entry.getValue()) {
-        // Formatter to print amounts with Dollar Currency Sign
-        DecimalFormat decimalFormatter = new DecimalFormat("$#,##0.00;-$#,##0.00");
-        averageStringOutput.append("{\"").append(entry.getKey())
-                           .append("\": {\"spent\": \"").append(decimalFormatter.format(statement.getSpent()))
-                           .append("\", \"income\": \"").append(decimalFormatter.format(statement.getIncome()))
-                           .append("\"}");
-        
-        if(numberOfStatements > 1){
-          averageStringOutput.append(",").append(org.apache.commons.lang3.StringUtils.LF);
-          numberOfStatements--;
-        }
-      }
-    }
-    
-    averageStringOutput.append("}");
-
-    return averageStringOutput.toString();
   }
 }
