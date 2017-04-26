@@ -16,8 +16,7 @@ git clone https://github.com/gauravkanojia/app-coding-exercise.git
 
 Changes can be pushed through a pull request and will be reviewed before merging them to the main (master) repository.
 
-For `Forking` this repository, simply click on the <!-- Place this tag where you want the button to render. -->
-<a class="github-button" href="https://github.com/ntkme/github-buttons/fork" data-icon="octicon-repo-forked" data-style="mega" data-show-count="true" aria-label="Fork ntkme/github-buttons on GitHub">Fork</a> button on the top right corner.
+For `Forking` this repository, simply click on the ![Fork It](https://github.com/gauravkanojia/app-coding-exercise/blob/master/GitHub_Fork_Button.png) button on the top right corner.
 
 
 ## Build Process
