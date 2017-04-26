@@ -1,9 +1,5 @@
 package com.gauravk.app.coding.service;
 
-import java.util.List;
-import java.util.Map;
-
-import com.gauravk.app.coding.model.CoreApiStatement;
 import com.gauravk.app.coding.model.CoreApiTransactionsResponse;
 
 
@@ -20,7 +16,7 @@ public interface CoreApiService {
    * @return Map<String, List<CoreApiStatement>> - A map containing the averages for each month from
    *         provided transactions.
    */
-  Map<String, List<CoreApiStatement>> getAverages(CoreApiTransactionsResponse transactions);
+  String getAverages(CoreApiTransactionsResponse transactions);
 
   /**
    * This method will be implemented for filtering out the transactions that are related to donuts.

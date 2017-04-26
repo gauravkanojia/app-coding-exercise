@@ -14,15 +14,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CoreApiStatement implements Serializable {
+public class CoreApiExpensesStatement implements Serializable {
 
   private static final long serialVersionUID = 4879745013754030623L;
 
-  public CoreApiStatement() {
+  public CoreApiExpensesStatement() {
     super();
   }
 
-  public CoreApiStatement(long spent, long income) {
+  public CoreApiExpensesStatement(long spent, long income) {
     super();
     this.spent = spent;
     this.income = income;
@@ -66,7 +66,6 @@ public class CoreApiStatement implements Serializable {
   public String toString() {
     // Formatter to print Amounts with $ sign and decimal places
     DecimalFormat decimalFormatter = new DecimalFormat("$#,##0.00;-$#,##0.00");
-    return " {spent=\"" + decimalFormatter.format(spent) + "\", income=\""
-        + decimalFormatter.format(income) + "\"}";
+    return " [spent=\"" + decimalFormatter.format(spent) + "\", income=\"" + decimalFormatter.format(income) + "\"]";
   }
 }
